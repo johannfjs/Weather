@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Clima</string>
+    <string name="change_city">Cambiar ciudad</string>
+    <string name="place_not_found">Disculpa, no hay información del clima.</string>
+    <string name="change">Cambiar</string>
+
+    <string name="last_update">Ultima Actualización:&#160;</string>
+    <string name="pressure">Presión:&#160;</string>
+    <string name="humidity">Humedad:&#160;</string>
+</resources>

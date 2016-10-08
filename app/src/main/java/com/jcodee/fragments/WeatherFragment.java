@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -96,15 +97,15 @@ public class WeatherFragment extends Fragment {
             JSONObject main = json.getJSONObject("main");
             detailsField.setText(
                     details.getString("description").toUpperCase(Locale.US) +
-                            "\n" + "Humidity: " + main.getString("humidity") + "%" +
-                            "\n" + "Pressure: " + main.getString("pressure") + " hPa");
+                            "\n" + getResources().getString(R.string.humidity) + main.getString("humidity") + "%" +
+                            "\n" + getResources().getString(R.string.pressure) + main.getString("pressure") + " hPa");
 
             currentTemperatureField.setText(
                     String.format("%.2f", main.getDouble("temp")) + " ℃");
 
             DateFormat df = DateFormat.getDateTimeInstance();
             String updatedOn = df.format(new Date(json.getLong("dt") * 1000));
-            updatedField.setText("Last update: " + updatedOn);
+            updatedField.setText(getResources().getString(R.string.last_update) + updatedOn);
 
             setWeatherIcon(details.getInt("id"),
                     json.getJSONObject("sys").getLong("sunrise") * 1000,

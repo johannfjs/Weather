@@ -1,7 +1,4 @@
 <resources>
-    <string name="app_name">Weather</string>
-    <string name="change_city">Change city</string>
-
     <string name="open_weather_maps_app_id">92191c19457fe9b7fca86d665edc8bf7</string>
 
     <string name="weather_sunny">&#xf00d;</string>
@@ -14,5 +11,12 @@
     <string name="weather_thunder">&#xf01e;</string>
     <string name="weather_drizzle">&#xf01c;</string>
 
+    <string name="app_name">Weather</string>
+    <string name="change_city">Change city</string>
     <string name="place_not_found">Sorry, no weather data found.</string>
+    <string name="change">Go</string>
+
+    <string name="last_update">Last Update:&#160;</string>
+    <string name="pressure">Pressure:&#160;</string>
+    <string name="humidity">Humidity:&#160;</string>
 </resources>
