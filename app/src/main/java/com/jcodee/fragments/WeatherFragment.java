@@ -5,18 +5,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.jcodee.database.ConfigurationWS;
+import com.jcodee.database.HelperWS;
+import com.jcodee.database.ResponseData;
 import com.jcodee.preferences.CityPreference;
-import com.jcodee.utils.RemoteFetch;
 import com.jcodee.weather.R;
-
-import org.json.JSONObject;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -24,6 +22,9 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by johannfjs on 8/10/16.
@@ -52,6 +53,7 @@ public class WeatherFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weather.ttf");
+
         updateWeatherData(new CityPreference(getActivity()).getCity());
     }
 
@@ -65,55 +67,34 @@ public class WeatherFragment extends Fragment {
     }
 
     private void updateWeatherData(final String city) {
-        new Thread() {
-            public void run() {
-                final JSONObject json = RemoteFetch.getJSON(getActivity(), city);
-                if (json == null) {
-                    handler.post(new Runnable() {
-                        public void run() {
-                            Toast.makeText(getActivity(),
-                                    getActivity().getString(R.string.place_not_found),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    handler.post(new Runnable() {
-                        public void run() {
-                            renderWeather(json);
-                        }
-                    });
+        HelperWS helperWS = ConfigurationWS.getConfiguration().create(HelperWS.class);
+        Call<ResponseData> result = helperWS.getWeather("weather?q=" + city + "&units=metric&appid=92191c19457fe9b7fca86d665edc8bf7");
+        result.enqueue(new Callback<ResponseData>() {
+            @Override
+            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
+                ResponseData resultado = response.body();
+                if (resultado != null) {
+                    cityField.setText(resultado.getSys().getCountry());
+                    detailsField.setText(
+                            resultado.getWeather().get(0).getDescription().toUpperCase(Locale.US) +
+                                    "\n" + getResources().getString(R.string.humidity) + resultado.getMain().getHumidity() + "%" +
+                                    "\n" + getResources().getString(R.string.pressure) + resultado.getMain().getPressure() + " hPa");
+                    currentTemperatureField.setText(String.valueOf(resultado.getMain().getTemp()));
+                    DateFormat df = DateFormat.getDateTimeInstance();
+                    String updatedOn = df.format(new Date(resultado.getDt() * 1000));
+                    updatedField.setText(getResources().getString(R.string.last_update) + updatedOn);
+
+                    setWeatherIcon(resultado.getWeather().get(0).getId(),
+                            resultado.getSys().getSunrise() * 1000,
+                            resultado.getSys().getSunset() * 1000);
                 }
             }
-        }.start();
-    }
 
-    private void renderWeather(JSONObject json) {
-        try {
-            cityField.setText(json.getString("name").toUpperCase(Locale.US) +
-                    ", " +
-                    json.getJSONObject("sys").getString("country"));
+            @Override
+            public void onFailure(Call<ResponseData> call, Throwable t) {
 
-            JSONObject details = json.getJSONArray("weather").getJSONObject(0);
-            JSONObject main = json.getJSONObject("main");
-            detailsField.setText(
-                    details.getString("description").toUpperCase(Locale.US) +
-                            "\n" + getResources().getString(R.string.humidity) + main.getString("humidity") + "%" +
-                            "\n" + getResources().getString(R.string.pressure) + main.getString("pressure") + " hPa");
-
-            currentTemperatureField.setText(
-                    String.format("%.2f", main.getDouble("temp")) + " ℃");
-
-            DateFormat df = DateFormat.getDateTimeInstance();
-            String updatedOn = df.format(new Date(json.getLong("dt") * 1000));
-            updatedField.setText(getResources().getString(R.string.last_update) + updatedOn);
-
-            setWeatherIcon(details.getInt("id"),
-                    json.getJSONObject("sys").getLong("sunrise") * 1000,
-                    json.getJSONObject("sys").getLong("sunset") * 1000);
-
-        } catch (Exception e) {
-            Log.e("SimpleWeather", "One or more fields not found in the JSON data");
-        }
+            }
+        });
     }
 
     private void setWeatherIcon(int actualId, long sunrise, long sunset) {
