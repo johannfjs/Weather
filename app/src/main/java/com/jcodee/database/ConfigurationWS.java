@@ -1,5 +1,7 @@
 package com.jcodee.database;
 
+import com.jcodee.utils.WebServices;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -10,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ConfigurationWS {
     public static Retrofit getConfiguration() {
         return new Retrofit.Builder()
-                .baseUrl("http://api.openweathermap.org/data/2.5/")
+                .baseUrl(WebServices.API)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }

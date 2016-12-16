@@ -1,6 +1,10 @@
 package com.jcodee.database;
 
 import com.google.gson.annotations.SerializedName;
+import com.jcodee.database.weather.CoordResponse;
+import com.jcodee.database.weather.MainModel;
+import com.jcodee.database.weather.SysModel;
+import com.jcodee.database.weather.WeatherModel;
 
 import java.util.ArrayList;
 
@@ -8,7 +12,7 @@ import java.util.ArrayList;
  * Created by johannfjs on 21/10/16.
  */
 
-public class ResponseData {
+public class WeatherDataResponse {
     @SerializedName("base")
     private String base;
     @SerializedName("name")
@@ -21,6 +25,16 @@ public class ResponseData {
     private long dt;
     @SerializedName("main")
     private MainModel main;
+    @SerializedName("coord")
+    private CoordResponse coord;
+
+    public CoordResponse getCoord() {
+        return coord;
+    }
+
+    public void setCoord(CoordResponse coord) {
+        this.coord = coord;
+    }
 
     public MainModel getMain() {
         return main;

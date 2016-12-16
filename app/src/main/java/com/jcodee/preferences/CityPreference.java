@@ -15,7 +15,7 @@ public class CityPreference {
     }
 
     public String getCity() {
-        return prefs.getString("city", "Sydney, AU");
+        return prefs.getString("city", "Lima, LIM");
     }
 
     public void setCity(String city) {

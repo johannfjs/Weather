@@ -1,19 +1,17 @@
 package com.jcodee.fragments;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.jcodee.database.ConfigurationWS;
-import com.jcodee.database.HelperWS;
-import com.jcodee.database.ResponseData;
+import com.jcodee.database.WeatherDataResponse;
+import com.jcodee.database.WeatherWS;
 import com.jcodee.preferences.CityPreference;
+import com.jcodee.views.TextViewCustom;
 import com.jcodee.weather.R;
 
 import java.text.DateFormat;
@@ -32,28 +30,19 @@ import retrofit2.Response;
 
 public class WeatherFragment extends Fragment {
     @BindView(R.id.city_field)
-    TextView cityField;
+    TextViewCustom cityField;
     @BindView(R.id.updated_field)
-    TextView updatedField;
+    TextViewCustom updatedField;
     @BindView(R.id.weather_icon)
-    TextView weatherIcon;
+    TextViewCustom weatherIcon;
     @BindView(R.id.current_temperature_field)
-    TextView currentTemperatureField;
+    TextViewCustom currentTemperatureField;
     @BindView(R.id.details_field)
-    TextView detailsField;
-    private Typeface weatherFont;
-    private Handler handler;
-
-    public WeatherFragment() {
-        handler = new Handler();
-    }
+    TextViewCustom detailsField;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weather.ttf");
-
         updateWeatherData(new CityPreference(getActivity()).getCity());
     }
 
@@ -62,17 +51,16 @@ public class WeatherFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_weather, container, false);
         ButterKnife.bind(this, root);
 
-        weatherIcon.setTypeface(weatherFont);
         return root;
     }
 
     private void updateWeatherData(final String city) {
-        HelperWS helperWS = ConfigurationWS.getConfiguration().create(HelperWS.class);
-        Call<ResponseData> result = helperWS.getWeather("weather?q=" + city + "&units=metric&appid=92191c19457fe9b7fca86d665edc8bf7");
-        result.enqueue(new Callback<ResponseData>() {
+        WeatherWS weatherWS = ConfigurationWS.getConfiguration().create(WeatherWS.class);
+        Call<WeatherDataResponse> result = weatherWS.getWeather("weather?q=" + city + "&units=metric&appid=" + getResources().getString(R.string.open_weather_maps_app_id));
+        result.enqueue(new Callback<WeatherDataResponse>() {
             @Override
-            public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
-                ResponseData resultado = response.body();
+            public void onResponse(Call<WeatherDataResponse> call, Response<WeatherDataResponse> response) {
+                WeatherDataResponse resultado = response.body();
                 if (resultado != null) {
                     cityField.setText(resultado.getSys().getCountry());
                     detailsField.setText(
@@ -91,7 +79,7 @@ public class WeatherFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ResponseData> call, Throwable t) {
+            public void onFailure(Call<WeatherDataResponse> call, Throwable t) {
 
             }
         });

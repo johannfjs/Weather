@@ -8,7 +8,7 @@ import retrofit2.http.Url;
  * Created by johannfjs on 21/10/16.
  */
 
-public interface HelperWS {
+public interface WeatherWS {
     @POST
-    Call<ResponseData> getWeather(@Url String url);
+    Call<WeatherDataResponse> getWeather(@Url String url);
 }

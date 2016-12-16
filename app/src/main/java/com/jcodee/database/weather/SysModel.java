@@ -1,4 +1,4 @@
-package com.jcodee.database;
+package com.jcodee.database.weather;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -13,6 +13,16 @@ public class SysModel {
     private long sunrise;
     @SerializedName("sunset")
     private long sunset;
+    @SerializedName("message")
+    private Double message;
+
+    public Double getMessage() {
+        return message;
+    }
+
+    public void setMessage(Double message) {
+        this.message = message;
+    }
 
     public long getSunrise() {
         return sunrise;
