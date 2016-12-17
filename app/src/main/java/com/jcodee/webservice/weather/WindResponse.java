@@ -1,4 +1,4 @@
-package com.jcodee.database.weather;
+package com.jcodee.webservice.weather;
 
 import com.google.gson.annotations.SerializedName;
 

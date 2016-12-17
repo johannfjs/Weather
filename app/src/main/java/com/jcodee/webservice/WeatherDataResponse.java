@@ -1,10 +1,10 @@
-package com.jcodee.database;
+package com.jcodee.webservice;
 
 import com.google.gson.annotations.SerializedName;
-import com.jcodee.database.weather.CoordResponse;
-import com.jcodee.database.weather.MainModel;
-import com.jcodee.database.weather.SysModel;
-import com.jcodee.database.weather.WeatherModel;
+import com.jcodee.webservice.weather.CoordResponse;
+import com.jcodee.webservice.weather.MainModel;
+import com.jcodee.webservice.weather.SysModel;
+import com.jcodee.webservice.weather.WeatherModel;
 
 import java.util.ArrayList;
 

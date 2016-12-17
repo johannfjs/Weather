@@ -1,4 +1,4 @@
-package com.jcodee.database;
+package com.jcodee.webservice;
 
 import com.jcodee.utils.WebServices;
 

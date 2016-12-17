@@ -1,4 +1,4 @@
-package com.jcodee.database;
+package com.jcodee.webservice;
 
 import retrofit2.Call;
 import retrofit2.http.POST;

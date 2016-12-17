@@ -20,4 +20,7 @@
     <string name="last_update">Ultima Actualización:&#160;</string>
     <string name="pressure">Presión:&#160;</string>
     <string name="humidity">Humedad:&#160;</string>
+
+    <string name="speech_prompt">Say something&#8230;</string>
+    <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
 </resources>

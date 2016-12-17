@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jcodee.database.ConfigurationWS;
-import com.jcodee.database.WeatherDataResponse;
-import com.jcodee.database.WeatherWS;
+import com.jcodee.webservice.ConfigurationWS;
+import com.jcodee.webservice.WeatherDataResponse;
+import com.jcodee.webservice.WeatherWS;
 import com.jcodee.preferences.CityPreference;
 import com.jcodee.views.TextViewCustom;
 import com.jcodee.weather.R;
@@ -62,12 +62,13 @@ public class WeatherFragment extends Fragment {
             public void onResponse(Call<WeatherDataResponse> call, Response<WeatherDataResponse> response) {
                 WeatherDataResponse resultado = response.body();
                 if (resultado != null) {
-                    cityField.setText(resultado.getSys().getCountry());
+                    CityPreference cityPreference = new CityPreference(getActivity());
+                    cityField.setText(resultado.getSys().getCountry() + " / " + cityPreference.getCity());
                     detailsField.setText(
                             resultado.getWeather().get(0).getDescription().toUpperCase(Locale.US) +
                                     "\n" + getResources().getString(R.string.humidity) + resultado.getMain().getHumidity() + "%" +
                                     "\n" + getResources().getString(R.string.pressure) + resultado.getMain().getPressure() + " hPa");
-                    currentTemperatureField.setText(String.valueOf(resultado.getMain().getTemp()));
+                    currentTemperatureField.setText(String.valueOf(resultado.getMain().getTemp()) + "º");
                     DateFormat df = DateFormat.getDateTimeInstance();
                     String updatedOn = df.format(new Date(resultado.getDt() * 1000));
                     updatedField.setText(getResources().getString(R.string.last_update) + updatedOn);
